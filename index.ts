@@ -1,17 +1,19 @@
 
-import { Photos } from "./tests/content.ts";
 import { QueryTokeniser } from "./tokeniser.ts";
+import { Comparator } from "./types.ts";
 
 /*
  * A synchronous search-engine that searches through a list of content
  * and returns the relevant content efficiently. Designed to scale out to a few tens of
  * thousands of items.
  */
-class HaystackSearchEngine<T> {
-  content: T[];
+export class HaystackSearchEngine<T> {
+  content;
+  comparators;
 
-  constructor(content: T[]) {
+  constructor(content: T[], comparators: Record<string, Comparator<any, any>>) {
     this.content = content;
+    this.comparators = comparators;
   }
 
   /*
@@ -25,17 +27,26 @@ class HaystackSearchEngine<T> {
     const tokeniser = new QueryTokeniser();
     const tokens = tokeniser.tokenise(queryText);
 
-    console.log(tokens)
+    for (const content of this.content) {
+      let allMatch = true;
 
-    yield this.content[0];
+      for (const { relation, subquery } of tokens) {
+        if (!relation || !subquery) {
+          continue; // todo: stronger typing
+        }
+        const relComparator = this.comparators[relation];
+        if (!relComparator) {
+          allMatch = false;
+        } else if (!allMatch) {
+          continue;
+        }
+
+        allMatch = allMatch && relComparator(content, subquery);
+      }
+
+      if (allMatch) {
+        yield content;
+      }
+    }
   }
-}
-
-// test things out
-const engine = new HaystackSearchEngine(
-  Photos()
-);
-
-for (const item of engine.search("before:Winter after:2024")) {
-  console.log(item);
 }

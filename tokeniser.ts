@@ -57,7 +57,7 @@ export class QueryTokeniser {
     this.state = state;
   }
 
-  tokenise(query: string): RelationCall[] {
+  tokenise(query: string): Required<RelationCall>[] {
     let rest = query.trim();
     const tokens = [];
 
@@ -108,6 +108,6 @@ export class QueryTokeniser {
       }
     }
 
-    return tokens;
+    return tokens as Required<RelationCall>[];
   }
 }
