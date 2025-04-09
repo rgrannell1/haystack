@@ -1,0 +1,28 @@
+{
+  "name": "haystack",
+  "version": "1.0.0",
+  "description": "Haystack is a JS-based search engine for filtering items by metadata using a query language.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgrannell1/haystack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rgrannell1/haystack/issues"
+  },
+  "homepage": "https://github.com/rgrannell1/haystack#readme",
+  "dependencies": {
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2"
+  }
+}
